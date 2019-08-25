@@ -109,7 +109,7 @@ func readScan(in io.Reader, c chan<- string) {
 	}
 }
 
-func writeRoutine(ctx context.Context, conn net.Conn, c <-chan string) {
+func writeRoutine(ctx context.Context, out io.Writer, c <-chan string) {
 OUTER:
 	for {
 		select {
@@ -120,7 +120,7 @@ OUTER:
 				fmt.Println("Write error: channel is closed")
 				break OUTER
 			}
-			_, err := conn.Write([]byte(line + "\n"))
+			_, err := out.Write([]byte(line + "\n"))
 			if err != nil {
 				fmt.Printf("Wrire error: %s\n", err)
 				break OUTER
